@@ -1,0 +1,1 @@
+import { BasicController } from './basic.controller'
