@@ -3,7 +3,7 @@ import { isEmail, isPhoneNumber, ValidationArguments, ValidatorConstraint, Valid
 @ValidatorConstraint({ name: "IsPhoneNumberOrEmail", async: true })
 export class IsPhoneNumberOrEmail implements ValidatorConstraintInterface {
     validate(value: any, validationArguments?: ValidationArguments): boolean | Promise<boolean> {
-        if (isPhoneNumber(value, 'MA'))
+        if (isPhoneNumber(value))
             return true;
         if (isEmail(value))
             return true;

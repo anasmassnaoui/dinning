@@ -1,4 +1,4 @@
-import { IsNumber, Validate } from "class-validator";
+import { IsNotEmpty, IsNumber, Validate } from "class-validator";
 import { IsPhoneNumberOrEmail } from "src/shared/validators/isPhoneOrEmail.validator";
 
 export class ConfirmationFormDto {
@@ -6,4 +6,10 @@ export class ConfirmationFormDto {
     basicInfo: string;
     @IsNumber()
     confirmationNumber: number;
+    @IsNotEmpty()
+    password: string
+    @IsNotEmpty()
+    firstName: string
+    @IsNotEmpty()
+    lastName: string
 }
