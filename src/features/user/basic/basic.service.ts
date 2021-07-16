@@ -1,16 +1,16 @@
-import { Injectable, NotAcceptableException, NotFoundException, UseInterceptors } from "@nestjs/common";
+import { Global, Injectable, NotAcceptableException, NotFoundException, UseInterceptors } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { isEmail, isPhoneNumber } from "class-validator";
 import { Model } from "mongoose";
-import { User, UserDocument } from "../schema";
+import { User, UserDocument } from "./user.schema";
 import { Devise, Role } from "src/shared/types";
-import { ConfirmationFormDto, LoginFormDto, RegisterFormDto, UserFormGetDto, UserFormPostDto } from "../dto";
+import { UserFormGetDto, UserFormPostDto, RegisterFormDto, ConfirmationFormDto, LoginFormDto } from "./dto";
 import { parsePhoneNumber } from 'libphonenumber-js'
-import { AuthService } from "src/modules/auth";
+import { AuthService } from "../../../modules/auth";
 
 
 @Injectable()
-export class UserService {
+export class BasicService {
     constructor(
         private authService: AuthService,
         @InjectModel(User.name) private userModel: Model<UserDocument>) {}
@@ -106,35 +106,15 @@ export class UserService {
 
     async get(userId: string) : Promise<UserFormGetDto> {
 
-        const { role, devise, ...rest } = (await this.userModel.findOne({ _id: userId })).toJSON()
+        const user = await this.userModel.findOne({ _id: userId })
+
+        const { role, devise, ...rest } = user.toJSON()
+
         return { 
             ...rest,
-            role: "",
-            devise: ""
+            role: Role[role],
+            devise: Devise[devise]
         }
-
-        // const {
-        //     firstName,
-        //     lastName,
-        //     facebook,
-        //     google,
-        //     phone,
-        //     email,
-        //     active,
-        //     role,
-        //     devise
-        // } = await this.userModel.findOne({ _id: userId })
-        // return {
-        //     firstName,
-        //     lastName,
-        //     facebook,
-        //     google,
-        //     phone,
-        //     email,
-        //     active,
-        //     role: Role[role],
-        //     devise: Devise[devise]
-        // }
     }
 
 }
