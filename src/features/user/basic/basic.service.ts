@@ -1,6 +1,6 @@
-import { Global, Injectable, NotAcceptableException, NotFoundException, UseInterceptors } from "@nestjs/common";
+import { Injectable, NotAcceptableException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { isEmail, isPhoneNumber } from "class-validator";
+import { isEmail } from "class-validator";
 import { Model } from "mongoose";
 import { User, UserDocument } from "./user.schema";
 import { Devise, Role } from "src/shared/types";
