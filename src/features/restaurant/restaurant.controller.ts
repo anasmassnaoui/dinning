@@ -15,14 +15,14 @@ export class RestaurantController {
     @UseInterceptors(new PropsCleanerNestInterceptor(RestaurantFormDto))
     @Get()
     async get(@Request() req) : Promise<RestaurantFormDto> {
-        return this.restaurantService.get(req.userId);
+        return this.restaurantService.get(req.user.userId);
     }
 
     @UseGuards(JwtGuard)
     @UseInterceptors(new PropsCleanerNestInterceptor(RestaurantFormDto))
     @Put()
     async put(@Request() req, @Body() restaurantFormDto : RestaurantFormDto) : Promise<RestaurantFormDto> {
-        return this.restaurantService.update(req.userId, restaurantFormDto)
+        return this.restaurantService.update(req.user.userId, restaurantFormDto)
     }
 
 }
