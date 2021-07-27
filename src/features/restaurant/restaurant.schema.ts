@@ -1,44 +1,54 @@
 import { Prop, Schema, raw, SchemaFactory } from "@nestjs/mongoose"
 import { User } from "../user/basic/user.schema"
-import { Localization, TimeRange } from './restaurant.dto'
 import * as mongoose from 'mongoose';
 
 export type RestaurantDocument = Restaurant & Document
 
 @Schema()
+class Localization {
+    @Prop({ default: 0 })
+    lat: Number
+    @Prop({ default: 0 })
+    lon: Number
+    @Prop({ default: "" })
+    address: String
+}
+
+@Schema()
+class TimeRange {
+    @Prop({ default: null })
+    begin: Date
+    @Prop({ default: null })
+    end: Date
+}
+
+@Schema()
 export class Restaurant {
-    @Prop()
+    @Prop({ default: "" })
     title: string
-    @Prop()
+    @Prop({ default: "" })
     phoneNumber: string
-    @Prop()
+    @Prop({ default: "" })
     subTitle: string
-    @Prop()
+    @Prop({ default: "" })
     slogan: string
-    @Prop()
+    @Prop({ default: "" })
     color: string
-    @Prop(raw({
-        begin: { type: Date },
-        end: { type: Date }
-    }))
+    @Prop(raw(TimeRange))
     timeRange: TimeRange
-    @Prop()
+    @Prop({ default: "" })
     cover: string
-    @Prop()
+    @Prop({ default: "" })
     description: string
-    @Prop()
+    @Prop({ default: false })
     onTheSpot: boolean
-    @Prop()
+    @Prop({ default: false })
     delivery: boolean
-    @Prop()
+    @Prop({ default: false })
     takeAway: boolean
-    @Prop(raw({
-        lat: { type: Number },
-        lon: { type: Number },
-        address: { type: String }
-    }))
+    @Prop(raw(Localization))
     localization: Localization
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     owner: User
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
     users: User[]
