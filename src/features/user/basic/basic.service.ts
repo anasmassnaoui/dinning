@@ -3,8 +3,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { isEmail } from "class-validator";
 import { Model } from "mongoose";
 import { User, UserDocument } from "./user.schema";
-import { Devise, Role } from "src/shared/types";
-import { UserFormGetDto, UserFormPostDto, RegisterFormDto, ConfirmationFormDto, LoginFormDto } from "./dto";
+import { Role } from "src/shared/types";
+import { RegisterFormDto, ConfirmationFormDto, LoginFormDto } from "./dto";
 import { parsePhoneNumber } from 'libphonenumber-js'
 import { AuthService } from "../../../modules/auth";
 
@@ -13,9 +13,9 @@ import { AuthService } from "../../../modules/auth";
 export class BasicService {
     constructor(
         private authService: AuthService,
-        @InjectModel(User.name) private userModel: Model<UserDocument>) {}
+        @InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
-    destruct_basicInfo(basicInfo: string) : { email?: string, phone?: string } {
+    destruct_basicInfo(basicInfo: string): { email?: string, phone?: string } {
 
         if (isEmail(basicInfo))
             return { email: basicInfo }
@@ -24,7 +24,7 @@ export class BasicService {
 
     }
 
-    async register(registerForm: RegisterFormDto) : Promise<any>{
+    async register(registerForm: RegisterFormDto): Promise<any> {
 
         const { role, basicInfo } = registerForm
 
@@ -32,7 +32,7 @@ export class BasicService {
 
         if (role == Role.Client && !phone)
             throw new NotAcceptableException("client users must register only with phone number")
-        
+
         const user = await this.userModel.findOne(email ? { email } : { phone })
         if (user)
             throw new NotAcceptableException("user already registred")
@@ -50,7 +50,7 @@ export class BasicService {
     }
 
     async confirm(confirmationForm: ConfirmationFormDto): Promise<any> {
-    
+
         const { basicInfo, confirmationNumber, password, firstName, lastName } = confirmationForm
 
         const { email, phone } = this.destruct_basicInfo(basicInfo)
@@ -92,29 +92,10 @@ export class BasicService {
 
         if (!active)
             throw new NotAcceptableException("user must complete registration")
-            
-        if(password != user.password)
+
+        if (password != user.password)
             throw new NotAcceptableException("incorrect password")
 
         return { access_token: this.authService.generateToken(_id, role) }
     }
-
-    async update(userId: string, userForm: UserFormPostDto) : Promise<UserFormGetDto> {
-        await this.userModel.updateOne({ _id: userId }, userForm)
-        return this.get(userId)
-    }
-
-    async get(userId: string) : Promise<UserFormGetDto> {
-
-        const user = await this.userModel.findOne({ _id: userId })
-
-        const { role, devise, ...rest } = user.toJSON()
-
-        return { 
-            ...rest,
-            role: Role[role],
-            devise: Devise[devise]
-        }
-    }
-
 }
