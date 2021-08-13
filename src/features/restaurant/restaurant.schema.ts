@@ -6,9 +6,9 @@ export type RestaurantDocument = Restaurant & Document
 
 @Schema()
 class Localization {
-    @Prop({ default: 0 })
+    @Prop({ default: null })
     lat: Number
-    @Prop({ default: 0 })
+    @Prop({ default: null })
     lon: Number
     @Prop({ default: "" })
     address: String
@@ -26,13 +26,13 @@ class TimeRange {
 export class Restaurant {
     @Prop({ default: "" })
     title: string
-    @Prop({ default: "" })
+    @Prop({ default: null })
     phoneNumber: string
     @Prop({ default: "" })
     subTitle: string
     @Prop({ default: "" })
     slogan: string
-    @Prop({ default: "" })
+    @Prop({ default: null })
     color: string
     @Prop(raw(TimeRange))
     timeRange: TimeRange
