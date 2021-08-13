@@ -4,15 +4,17 @@ import { JwtStrategy } from "src/modules/auth";
 import { RestaurantController } from "./restaurant.controller";
 import { Restaurant, RestaurantSchema } from "./restaurant.schema";
 import { RestaurantService } from "./restaurant.service";
+import { UsersModule } from "./users/users.module";
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([{
-          name: Restaurant.name,
-          schema: RestaurantSchema
-        }], 'dinning')
-    ],
-    controllers: [ RestaurantController ],
-    providers: [ RestaurantService, JwtStrategy ]
+  imports: [
+    MongooseModule.forFeature([{
+      name: Restaurant.name,
+      schema: RestaurantSchema
+    }], 'dinning'),
+    UsersModule
+  ],
+  controllers: [RestaurantController],
+  providers: [RestaurantService, JwtStrategy]
 })
 export class RestaurantModule { }
