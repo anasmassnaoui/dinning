@@ -4,37 +4,45 @@ import { UserFormGetDto, UserFormPostDto } from "./dto/userForm.dto";
 import { BasicService } from "./basic.service";
 import { JwtGuard } from "../../../modules/auth";
 import { RegisterFormDto, ConfirmationFormDto, LoginFormDto } from "./dto";
+import { UsersGetDto } from "src/features/restaurant/users/users.dto";
+import { UserService } from "./user.service";
 
-@Controller("user/basic")
+@Controller()
 export class BasicController {
 
-    constructor(private basicService: BasicService){}
+    constructor(private basicService: BasicService, private userService: UserService) { }
 
-    @Post("register")
-    register(@Body() registerForm: RegisterFormDto) : Promise<any> {
+    @Post("basic/register")
+    async register(@Body() registerForm: RegisterFormDto): Promise<any> {
         return this.basicService.register(registerForm);
     }
 
-    @Post("confirm")
-    confirm(@Body() confirmationForm: ConfirmationFormDto) : Promise<any> {
+    @Post("basic/confirm")
+    async confirm(@Body() confirmationForm: ConfirmationFormDto): Promise<any> {
         return this.basicService.confirm(confirmationForm);
     }
 
-    @Post("login")
-    login(@Body() loginForm: LoginFormDto) : Promise<any> {
+    @Post("basic/login")
+    async login(@Body() loginForm: LoginFormDto): Promise<any> {
         return this.basicService.login(loginForm);
     }
 
     @UseGuards(JwtGuard)
     @UseInterceptors(new PropsCleanerNestInterceptor(UserFormGetDto))
-    @Get()
-    get(@Request() req) : Promise<UserFormGetDto> {
-        return this.basicService.get(req.user.userId);
+    @Get("/user")
+    async user(@Request() req): Promise<UserFormGetDto> {
+        return this.userService.user(req.user.userId);
     }
 
     @UseGuards(JwtGuard)
-    @Put()
-    update(@Request() req, @Body() userForm: UserFormPostDto) : Promise<UserFormGetDto> {
-        return this.basicService.update(req.user.userId, userForm);
+    @Put("/user")
+    async updateUser(@Request() req, @Body() userForm: UserFormPostDto): Promise<UserFormGetDto> {
+        return this.userService.updateUser(req.user.userId, userForm);
+    }
+
+    @UseGuards(JwtGuard)
+    @Get("/users")
+    users(): Promise<UsersGetDto[]> {
+        return this.userService.users()
     }
 }
