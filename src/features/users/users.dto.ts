@@ -1,6 +1,6 @@
 import { IsEmail, IsEnum, IsOptional, IsPhoneNumber, IsString } from "class-validator"
-import { BaseEntity, Entity } from "../../../../libs/PropsCleanerNestInterceptor"
-import { Devise } from "src/shared/types"
+import { BaseEntity, Entity } from "../../libs/PropsCleanerNestInterceptor"
+import { Devise, Role } from "src/shared/types"
 import { Transform } from "class-transformer"
 
 @BaseEntity({ strict: true })
@@ -46,4 +46,11 @@ export class UserFormPostDto extends UserFormDto {
     @IsOptional()
     @Transform(({ value }) => typeof value == "string" ? Devise[value] : value)
     devise: Devise
+}
+
+export class OtherUserDto {
+    firstName: string
+    lastName: string
+    email: string
+    role: Role
 }

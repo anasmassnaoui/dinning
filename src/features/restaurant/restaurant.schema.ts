@@ -1,5 +1,5 @@
 import { Prop, Schema, raw, SchemaFactory } from "@nestjs/mongoose"
-import { User } from "../user/basic/user.schema"
+import { User } from "../users/user.schema"
 import * as mongoose from 'mongoose';
 
 export type RestaurantDocument = Restaurant & Document
@@ -22,8 +22,25 @@ class TimeRange {
     end: Date
 }
 
+export enum MI { Menu, Item }
+
+export class Menu {
+    type: MI
+    name: string
+    subMenu?: (Menu | Item)[]
+}
+
+export class Item {
+    type: MI
+    name: string
+    image: string
+}
+
 @Schema()
 export class Restaurant {
+
+    @Prop({ type: [{ type: mongoose.Schema.Types.Mixed }] })
+    menu: (Menu | Item)[]
     @Prop({ default: "" })
     title: string
     @Prop({ default: null })
@@ -51,7 +68,7 @@ export class Restaurant {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     owner: User
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    users: User[]
+    collaborateurs: User[]
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(Restaurant)

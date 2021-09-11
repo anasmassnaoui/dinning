@@ -3,8 +3,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { JwtStrategy } from "src/modules/auth";
 import { BasicController } from "./basic.controller";
 import { BasicService } from "./basic.service";
-import { User, UserSchema } from "./user.schema";
-import { UserService } from "./user.service";
+import { User, UserSchema } from "../users/user.schema";
 
 @Module({
   imports: [
@@ -14,6 +13,6 @@ import { UserService } from "./user.service";
     }], 'dinning')
   ],
   controllers: [BasicController],
-  providers: [BasicService, UserService, JwtStrategy],
+  providers: [BasicService, JwtStrategy],
 })
-export class BasicModule { }
+export class BasicAuthModule { }

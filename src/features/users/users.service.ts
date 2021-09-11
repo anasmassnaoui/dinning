@@ -3,10 +3,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User, UserDocument } from "./user.schema";
 import { Devise, Role } from "src/shared/types";
-import { UserFormGetDto, UserFormPostDto } from "./dto";
-import { AuthService } from "../../../modules/auth";
-import { UsersGetDto } from "src/features/restaurant/users/users.dto";
-
+import { OtherUserDto, UserFormGetDto, UserFormPostDto } from "./users.dto";
+import { AuthService } from "../../modules/auth";
 
 @Injectable()
 export class UserService {
@@ -31,7 +29,7 @@ export class UserService {
         }
     }
 
-    async users(): Promise<UsersGetDto[]> {
+    async users(): Promise<OtherUserDto[]> {
         const users = await this.userModel.find()
 
         return users

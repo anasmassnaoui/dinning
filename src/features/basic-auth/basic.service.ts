@@ -2,11 +2,11 @@ import { Injectable, NotAcceptableException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { isEmail } from "class-validator";
 import { Model } from "mongoose";
-import { User, UserDocument } from "./user.schema";
+import { User, UserDocument } from "../users/user.schema";
 import { Role } from "src/shared/types";
 import { RegisterFormDto, ConfirmationFormDto, LoginFormDto } from "./dto";
 import { parsePhoneNumber } from 'libphonenumber-js'
-import { AuthService } from "../../../modules/auth";
+import { AuthService } from "../../modules/auth";
 
 
 @Injectable()
